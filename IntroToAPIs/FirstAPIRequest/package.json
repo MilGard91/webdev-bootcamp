@@ -1,0 +1,14 @@
+{
+  "name": "firstapirequest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "first_request.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Miljan Milidrag",
+  "license": "ISC",
+  "dependencies": {
+    "request": "^2.85.0"
+  }
+}
