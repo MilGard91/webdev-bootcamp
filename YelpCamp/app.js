@@ -5,6 +5,8 @@ const mongoose = require("mongoose");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const methodOverride = require("method-override");
+const flash = require("connect-flash");
+const moment = require("moment")
 const Campground = require("./models/campground");
 const User = require("./models/user");
 const Comment = require("./models/comment");
@@ -19,6 +21,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(methodOverride("_method"));
+app.use(flash());
+app.locals.moment = moment;
 // seedDB(); //SEEDS THE DATABASE
 
 // =================
@@ -37,6 +41,8 @@ passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
   res.locals.currentUser = req.user;
+  res.locals.error = req.flash("error");
+  res.locals.success = req.flash("success");
   next();
 });
 

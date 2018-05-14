@@ -6,34 +6,70 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>YelpCamp</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css"
+    />
     <link rel="stylesheet" href="/style/main.css">
 </head>
 
 <body>
     <nav class="navbar navbar-default">
-        <div class="container-fluid">
+        <div class="container">
             <div class="navbar-header">
+                <button 
+                    type="button" 
+                    class="navbar-toggle collapsed" 
+                    data-toggle="collapse" 
+                    data-target="#navbar"
+                    aria-expanded="false"
+                    aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
                 <a href="/" class="navbar-brand">YelpCamp</a>
             </div>
-            <div class="collapse navbar-collapse">
+            <div id="navbar" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="<%= typeof page !== 'undefined' && page === 'campgrounds' ? 'active' : ''  %>">
+                        <a href="/campgrounds">Home</a>
+                    </li>
+                </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <% if(!currentUser){ %>
-                    <li>
-                        <a href="/login">Login</a>
-                    </li>
-                    <li>
-                        <a href="/register">Sign Up</a>
-                    </li>
-                <% }else {%>
-                    <li>
-                        <a href="#"><%= currentUser.username %></a>
-                    </li>
-                    <li>
-                        <a href="/logout">Logout</a>
-                    </li>
-                <% } %>
+                        <li class="<%= typeof page !== 'undefined' && page === 'logic' ? 'active' : '' %>">
+                            <a href="/login">Login</a>
+                        </li>
+                        <li class="typeof page !== 'undefined' && page === 'register' ? 'active' : '' %>">
+                            <a href="/register">Sign Up</a>
+                        </li>
+                        <% }else {%>
+                            <li>
+                                <a href="#">
+                                    <%= currentUser.username %>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/logout">Logout</a>
+                            </li>
+                            <% } %>
+                </ul>
             </div>
         </div>
         </div>
     </nav>
+
+    <div class="container">
+        <% if(error && error.length>0){ %>
+            <div class="alert alert-danger" role="alert">
+                <%= error %>
+            </div>
+            <% } %>
+                <% if(success && success.length>0){ %>
+                    <div class="alert alert-success" role="alert">
+                        <%= success %>
+                    </div>
+                    <% } %>
+    </div>
+    <div class="container">

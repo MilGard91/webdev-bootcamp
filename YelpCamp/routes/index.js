@@ -11,30 +11,27 @@ router.get("/", (req, res) => {
 });
 
 router.get("/register", (req, res) => {
-  res.render("register");
+  res.render("register", {page: 'register'});
 });
 
 router.post("/register", (req, res) => {
-  User.register(
-    new User({ username: req.body.username }),
-    req.body.password,
-    (err, user) => {
+  const newUser = new User({ username: req.body.username });
+  User.register(newUser, req.body.password, (err, user) => {
       if (err) {
-        console.log(err);
-        return res.render("register");
+        return res.render("register", {error: err.message});
       }
       passport.authenticate("local")(req, res, () => {
+        req.flash("success", "Welcome to YelpCamp " + user.username)
         res.redirect("/campgrounds");
       });
-    }
-  );
+    });
 });
 
 // =================
 // LOGIN
 // =================
 router.get("/login", (req, res) => {
-  res.render("login");
+  res.render("login", {page: 'login'});
 });
 
 router.post(

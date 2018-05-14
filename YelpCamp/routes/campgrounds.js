@@ -8,22 +8,24 @@ router.get("/", (req, res) => {
     if (err) {
       console.log(err);
     } else {
-      res.render("campgrounds/index", { campgrounds: allCampgrounds });
+      res.render("campgrounds/index", { campgrounds: allCampgrounds, page: "campgrounds" });
     }
   });
 });
 
 router.post("/", middleware.isLoggedIn, (req, res) => {
   const name = req.body.name;
+  const price = req.body.price;
   const image = req.body.image;
   const desc = req.body.desc;
   const author = {
     id: req.user._id,
     username: req.user.username
   };
-  const newCamp = { name, image, desc, author };
+  const newCamp = { name, price, image, desc, author };
   Campground.create(newCamp, (err, campground) => {
     if (err) {
+      req.flash("error", "Something went wrong");
       console.log(err);
     } else {
       res.redirect("/campgrounds");
@@ -39,8 +41,9 @@ router.get("/:id", (req, res) => {
   Campground.findById(req.params.id)
     .populate("comments")
     .exec((err, foundCampground) => {
-      if (err) {
-        console.log(err);
+      if (err || !foundCampground) {
+        req.flash("error", "Campground not found");
+        res.redirect("/campgrounds");
       } else {
         res.render("campgrounds/show", { campground: foundCampground });
       }
@@ -50,7 +53,8 @@ router.get("/:id", (req, res) => {
 // EDIT
 router.get("/:id/edit", middleware.checkCampground, (req, res) => {
   Campground.findById(req.params.id, (err, foundCampground) => {
-    if (err) {
+    if (err || !foundCampground) {
+      req.flash("error", "Campground not found");
       res.redirect("/campgrounds");
     } else {
       res.render("campgrounds/edit", { campground: foundCampground });
@@ -78,6 +82,7 @@ router.delete("/:id", middleware.checkCampground, (req, res) => {
     if (err) {
       res.redirect("/campgrounds");
     } else {
+      req.flash("success", "Campground deleted");
       res.redirect("/campgrounds");
     }
   });

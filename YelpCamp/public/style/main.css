@@ -13,3 +13,8 @@
 .form-delete{
     display: inline;
 }
+
+.form_container{
+    width: 30%;
+    margin: 25px auto;
+}
